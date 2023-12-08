@@ -1,5 +1,7 @@
 package com.fabrice.springbootjwtauth.controllers;
 
+import com.fabrice.springbootjwtauth.dto.JWTAuthResponse;
+import com.fabrice.springbootjwtauth.dto.SigninRequest;
 import com.fabrice.springbootjwtauth.dto.SignupRequest;
 import com.fabrice.springbootjwtauth.models.User;
 import com.fabrice.springbootjwtauth.services.AuthenticationService;
@@ -19,5 +21,11 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<User> signup(@RequestBody SignupRequest signupRequest){
         return ResponseEntity.ok(authenticationService.signup(signupRequest));
+    }
+
+
+    @PostMapping("/signin")
+    public ResponseEntity<JWTAuthResponse> signup(@RequestBody SigninRequest signinRequest){
+        return ResponseEntity.ok(authenticationService.signin(signinRequest));
     }
 }
