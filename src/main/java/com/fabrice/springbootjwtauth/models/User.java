@@ -17,11 +17,12 @@ public class User  implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String fName;
-    private  String lName;
+    private String firstname;
+    private String lastname;
 
     @Column(unique = true)
     private  String email;
+
     private String password;
 
     private Role role; // role of the user from the enum
