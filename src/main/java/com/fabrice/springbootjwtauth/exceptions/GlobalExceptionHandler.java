@@ -31,9 +31,18 @@ public class GlobalExceptionHandler {
         return errorResponse;
     }
 
+    //handling unauthorized exception
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public  ErrorResponse handleUnauthorizedException(UnauthorizedException exception){
+        ErrorResponse errorResponse =  new ErrorResponse();
+        errorResponse.setMessage(exception.getMessage());
+        errorResponse.setStatusCode(HttpStatus.UNAUTHORIZED.value());
+        return errorResponse;
+    }
 
     // global exceptions => reformatting spring boot exception response
-    // for all remaining kind of errors which can be found within our app
+    // for all remaining kind of errors which may occur within our app
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGlobalExceptions(Exception exception){
         String message  =  exception.getMessage();
