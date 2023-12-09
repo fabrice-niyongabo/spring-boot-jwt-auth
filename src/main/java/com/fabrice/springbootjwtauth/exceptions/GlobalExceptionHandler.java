@@ -14,10 +14,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGlobalExceptions(Exception exception){
         String message  =  exception.getMessage();
-        Integer statusCode = HttpStatus.INTERNAL_SERVER_ERROR.value();
+        Integer statusCode = HttpStatus.BAD_REQUEST.value();
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setMessage(message);
         errorResponse.setStatusCode(statusCode);
-        return new ResponseEntity<>(errorResponse,HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(errorResponse,HttpStatus.BAD_REQUEST);
     }
 }
