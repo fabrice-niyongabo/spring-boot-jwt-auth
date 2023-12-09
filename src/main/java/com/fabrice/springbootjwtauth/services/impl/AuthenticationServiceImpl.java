@@ -4,6 +4,8 @@ import com.fabrice.springbootjwtauth.dto.JWTAuthResponse;
 import com.fabrice.springbootjwtauth.dto.RefeshTokenRequest;
 import com.fabrice.springbootjwtauth.dto.SigninRequest;
 import com.fabrice.springbootjwtauth.dto.SignupRequest;
+import com.fabrice.springbootjwtauth.exceptions.BadRequestException;
+import com.fabrice.springbootjwtauth.exceptions.NotFoundException;
 import com.fabrice.springbootjwtauth.models.Role;
 import com.fabrice.springbootjwtauth.models.User;
 import com.fabrice.springbootjwtauth.repositories.UserRepository;
@@ -42,7 +44,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public JWTAuthResponse signin(SigninRequest signinRequest){
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(signinRequest.getEmail(),signinRequest.getPassword()));
         var user  = userRepository.findByEmail(signinRequest.getEmail())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid email or password"));
+                .orElseThrow(() -> new BadRequestException("Invalid email or password"));
         var jwt  =  jwtService.generateToken(user);
         var refreshToken  =  jwtService.generateRefreshToken(new HashMap<>(),user);
 
@@ -52,19 +54,19 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         jwtAuthResponse.setRefreshToken(refreshToken);
 
         return jwtAuthResponse;
-
     }
 
      public JWTAuthResponse refreshToken(RefeshTokenRequest refeshTokenRequest){
         String userEmail = jwtService.extractUsername(refeshTokenRequest.getToken());
-        User user = userRepository.findByEmail(userEmail).orElseThrow();
+        User user = userRepository.findByEmail(userEmail).orElseThrow(() -> new NotFoundException("User with such token can not be found"));
         if(jwtService.isTokenValid(refeshTokenRequest.getToken(), user)){
             var jwt = jwtService.generateToken(user);
+            var updatedRefreshToken  =  jwtService.generateRefreshToken(new HashMap<>(),user);
 
             JWTAuthResponse jwtAuthResponse =  new JWTAuthResponse();
 
             jwtAuthResponse.setToken(jwt);
-            jwtAuthResponse.setRefreshToken(refeshTokenRequest.getToken());
+            jwtAuthResponse.setRefreshToken(updatedRefreshToken);
 
             return jwtAuthResponse;
 
