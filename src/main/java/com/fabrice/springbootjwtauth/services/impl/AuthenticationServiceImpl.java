@@ -1,6 +1,7 @@
 package com.fabrice.springbootjwtauth.services.impl;
 
 import com.fabrice.springbootjwtauth.dto.JWTAuthResponse;
+import com.fabrice.springbootjwtauth.dto.RefeshTokenRequest;
 import com.fabrice.springbootjwtauth.dto.SigninRequest;
 import com.fabrice.springbootjwtauth.dto.SignupRequest;
 import com.fabrice.springbootjwtauth.models.Role;
@@ -53,4 +54,21 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return jwtAuthResponse;
 
     }
+
+     public JWTAuthResponse refreshToken(RefeshTokenRequest refeshTokenRequest){
+        String userEmail = jwtService.extractUsername(refeshTokenRequest.getToken());
+        User user = userRepository.findByEmail(userEmail).orElseThrow();
+        if(jwtService.isTokenValid(refeshTokenRequest.getToken(), user)){
+            var jwt = jwtService.generateToken(user);
+
+            JWTAuthResponse jwtAuthResponse =  new JWTAuthResponse();
+
+            jwtAuthResponse.setToken(jwt);
+            jwtAuthResponse.setRefreshToken(refeshTokenRequest.getToken());
+
+            return jwtAuthResponse;
+
+        }
+        return null;
+     }
 }

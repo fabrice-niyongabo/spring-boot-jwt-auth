@@ -1,6 +1,7 @@
 package com.fabrice.springbootjwtauth.controllers;
 
 import com.fabrice.springbootjwtauth.dto.JWTAuthResponse;
+import com.fabrice.springbootjwtauth.dto.RefeshTokenRequest;
 import com.fabrice.springbootjwtauth.dto.SigninRequest;
 import com.fabrice.springbootjwtauth.dto.SignupRequest;
 import com.fabrice.springbootjwtauth.models.User;
@@ -27,5 +28,10 @@ public class AuthController {
     @PostMapping("/signin")
     public ResponseEntity<JWTAuthResponse> signup(@RequestBody SigninRequest signinRequest){
         return ResponseEntity.ok(authenticationService.signin(signinRequest));
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<JWTAuthResponse> refresh(@RequestBody RefeshTokenRequest refeshTokenRequest){
+        return ResponseEntity.ok(authenticationService.refreshToken(refeshTokenRequest));
     }
 }
