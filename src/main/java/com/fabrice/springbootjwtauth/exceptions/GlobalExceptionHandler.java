@@ -12,32 +12,32 @@ public class GlobalExceptionHandler {
 
     //handle not found exception
     @ExceptionHandler(NotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND) //response status code
-    public ErrorResponse handleNotFoundException(NotFoundException exception){
+    //@ResponseStatus(HttpStatus.NOT_FOUND) //response status code
+    public ResponseEntity<ErrorResponse> handleNotFoundException(NotFoundException exception){
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setStatusCode(HttpStatus.NOT_FOUND.value());
         errorResponse.setMessage(exception.getMessage());
-        return  errorResponse;
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND)  ;
     }
 
     //handling bad request exception
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleBadRequestException(BadRequestException exception){
+    //@ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ErrorResponse> handleBadRequestException(BadRequestException exception){
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
         errorResponse.setMessage(exception.getMessage());
-        return errorResponse;
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST) ;
     }
 
     //handling unauthorized exception
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public  ErrorResponse handleUnauthorizedException(UnauthorizedException exception){
+    //@ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public  ResponseEntity<ErrorResponse> handleUnauthorizedException(UnauthorizedException exception){
         ErrorResponse errorResponse =  new ErrorResponse();
         errorResponse.setMessage(exception.getMessage());
         errorResponse.setStatusCode(HttpStatus.UNAUTHORIZED.value());
-        return errorResponse;
+        return new ResponseEntity<>(errorResponse,HttpStatus.UNAUTHORIZED) ;
     }
 
     // global exceptions => reformatting spring boot exception response
